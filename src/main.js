@@ -1,6 +1,7 @@
 import { Preloader } from './scenes/Preloader';
 import { MainMenu } from './scenes/MainMenu';
 import { CreateLobby } from './scenes/CreateLobby';
+import UIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin.js';
 
 
 const config = {
@@ -19,7 +20,15 @@ const config = {
         Preloader,
         MainMenu,
         CreateLobby,
-    ]
+    ],
+    plugins: {
+        scene: [{
+            key: 'rexUI',
+            plugin: UIPlugin,
+            mapping: 'rexUI'
+        }]
+    }
 };
 
-export default new Phaser.Game(config);
+let game = new Phaser.Game(config);
+export default game

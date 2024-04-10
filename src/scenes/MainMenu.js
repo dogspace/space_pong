@@ -2,8 +2,6 @@ import { Scene } from 'phaser';
 
 
 export class MainMenu extends Scene {
-    //cursors = Phaser.Types.Input.Keyboard.CursorKeys
-
     constructor () {
         super('MainMenu');
     }
@@ -55,7 +53,7 @@ export class MainMenu extends Scene {
         tutorialBox.on('pointerout', () => { this.buttonRest(tutorialBox) });
 
         // Button click actions
-        createLobbyBox.on('pointerdown', () => { this.scene.start('') })
+        createLobbyBox.on('pointerdown', () => { this.scene.start('CreateLobby') })
     }
 
     buttonHover(button) {

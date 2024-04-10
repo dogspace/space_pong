@@ -19,10 +19,16 @@ export class Preloader extends Scene {
     }
 
     preload () {
-        //  Load the assets for the game - Replace with your own assets
+        // Load RexUI plugin
+        this.load.plugin({
+            key: 'rexuiplugin',
+            url: 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexuiplugin.min.js',
+            sceneKey: 'rexUI'
+        });
+
+        //  Load game assets
         this.load.setPath('assets');
         this.load.image('logo', 'logo.png');
-        
     }
 
     create () {
