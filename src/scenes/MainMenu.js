@@ -17,7 +17,7 @@ export class MainMenu extends Scene {
 
         // Title
         const titleBox = this.add.rectangle(middleX, buttonHeight * 2, width, buttonHeight * 2, 0xa0a000)
-        const titleText = this.add.text(0, 0, 'SPACE PONG', {
+        const titleText = this.add.text(0, 0, 'MOON BALL', {
             fontFamily: 'Arial Black', fontSize: 60, color: '#ffffff',
             stroke: '#000000', strokeThickness: 10,
             align: 'center'

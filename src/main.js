@@ -14,7 +14,8 @@ const config = {
         mode: Phaser.Scale.WIDTH_CONTROLS_HEIGHT,
         //mode: Phaser.Scale.RESIZE,
         //mode: Phaser.Scale.FIT,
-        autoCenter: Phaser.Scale.CENTER_BOTH
+        autoCenter: Phaser.Scale.CENTER_BOTH,
+        //autoCenter: Phaser.Scale.NO_CENTER
     },
     scene: [
         Preloader,
