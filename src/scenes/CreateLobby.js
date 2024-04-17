@@ -1,6 +1,12 @@
 import { Scene } from 'phaser';
 
 
+let trackColors = ['0x00aa00', '0x0000aa', '0xaa0000']
+let lastBotDiff = 0
+let lastTimeLimit = 0
+let lastScoreLimit = 0
+
+
 export class CreateLobby extends Scene {
     constructor () {
         super('CreateLobby');
@@ -37,59 +43,67 @@ export class CreateLobby extends Scene {
         Phaser.Display.Align.In.LeftCenter(label4Text, label4)
         Phaser.Display.Align.In.LeftCenter(label5Text, label5)
 
-        // Create label buttons and sliders
+        // Create buttons and sliders
         let buttonLeft = xMargin + labelWidth + 20
         let button1 = this.rexUI.add.roundRectangle(buttonLeft, labelHeight*2, labelWidth, labelHeight, 2, 0x222222).setOrigin(0, 0)
         let button2 = this.rexUI.add.roundRectangle(buttonLeft, labelHeight*4, labelWidth, labelHeight, 2, 0x222222).setOrigin(0, 0)
-        let slideBox1 = this.rexUI.add.roundRectangle(buttonLeft, labelHeight*6, labelWidth, labelHeight, 2, 0x000000).setOrigin(0, 0)
-        let slideBox2 = this.rexUI.add.roundRectangle(buttonLeft, labelHeight*8, labelWidth, labelHeight, 2, 0x000000).setOrigin(0, 0)
-        let slideBox3 = this.rexUI.add.roundRectangle(buttonLeft, labelHeight*10, labelWidth, labelHeight, 2, 0x000000).setOrigin(0, 0)
-        let trackColors = { green: 0x00aa00, blue: 0x0000aa, red: 0xaa0000 }
-        let track1 = this.rexUI.add.roundRectangle(0, 0, labelWidth, 0, 5, trackColors.green)
-        let track2 = this.rexUI.add.roundRectangle(0, 0, labelWidth, 0, 5, trackColors.green)
-        let track3 = this.rexUI.add.roundRectangle(0, 0, labelWidth, 0, 5, trackColors.green)
-        let slider1 = this.rexUI.add.slider({
-            x: 0, y: 0, width: labelWidth, height: labelHeight, orientation: 'x', input: 'click', track: track1,
+        let botDiff_box = this.rexUI.add.roundRectangle(buttonLeft, labelHeight*6, labelWidth, labelHeight, 2, 0x000000).setOrigin(0, 0)
+        let timeLimit_box = this.rexUI.add.roundRectangle(buttonLeft, labelHeight*8, labelWidth, labelHeight, 2, 0x000000).setOrigin(0, 0)
+        let scoreLimit_box = this.rexUI.add.roundRectangle(buttonLeft, labelHeight*10, labelWidth, labelHeight, 2, 0x000000).setOrigin(0, 0)
+        let botDiff_track = this.rexUI.add.roundRectangle(0, 0, labelWidth, 0, 5, trackColors[0])
+        let timeLimit_track = this.rexUI.add.roundRectangle(0, 0, labelWidth, 0, 5, trackColors[0])
+        let scoreLimit_track = this.rexUI.add.roundRectangle(0, 0, labelWidth, 0, 5, trackColors[0])
+        let botDiff_slider = this.rexUI.add.slider({
+            x: 0, y: 0, width: labelWidth, height: labelHeight, orientation: 'x', input: 'click', track: botDiff_track,
             thumb: this.rexUI.add.roundRectangle(0, 0, 20, labelHeight, 6, 0xffffff),
             space: {
                 top: labelHeight/3,
                 bottom: labelHeight/3,
             },
-            valuechangeCallback: function (value) {
-                if      (value < 0.32) { track1.setFillStyle(trackColors.green) }
-                else if (value < 0.67) { track1.setFillStyle(trackColors.blue) }
-                else                   { track1.setFillStyle(trackColors.red) }
+            valuechangeCallback: (value) => {
+                let v = this.getSliderValue(value)
+                if (lastBotDiff != v) {
+                    lastBotDiff = v
+                    botDiff_track.setFillStyle(trackColors[v])
+                    this.game.config.gameSettings.botDiff = v
+                }
             }
         }).layout()
-        let slider2 = this.rexUI.add.slider({
-            x: 0, y: 0, width: labelWidth, height: labelHeight, orientation: 'x', input: 'click', track: track2,
+        let timeLimit_slider = this.rexUI.add.slider({
+            x: 0, y: 0, width: labelWidth, height: labelHeight, orientation: 'x', input: 'click', track: timeLimit_track,
             thumb: this.rexUI.add.roundRectangle(0, 0, 20, labelHeight, 6, 0xffffff),
             space: {
                 top: labelHeight/3,
                 bottom: labelHeight/3,
             },
-            valuechangeCallback: function (value) {
-                if      (value < 0.32) { track2.setFillStyle(trackColors.green) }
-                else if (value < 0.67) { track2.setFillStyle(trackColors.blue) }
-                else                   { track2.setFillStyle(trackColors.red) }
+            valuechangeCallback: (value) => {
+                let v = this.getSliderValue(value)
+                if (lastTimeLimit != v) {
+                    lastTimeLimit = v
+                    timeLimit_track.setFillStyle(trackColors[v])
+                    this.game.config.gameSettings.timeLimit = this.getTimeValue(v)
+                }
             }
         }).layout()
-        let slider3 = this.rexUI.add.slider({
-            x: 0, y: 0, width: labelWidth, height: labelHeight, orientation: 'x', input: 'click', track: track3,
+        let scoreLimit_slider = this.rexUI.add.slider({
+            x: 0, y: 0, width: labelWidth, height: labelHeight, orientation: 'x', input: 'click', track: scoreLimit_track,
             thumb: this.rexUI.add.roundRectangle(0, 0, 20, labelHeight, 6, 0xffffff),
             space: {
                 top: labelHeight/3,
                 bottom: labelHeight/3,
             },
-            valuechangeCallback: function (value) {
-                if      (value < 0.32) { track3.setFillStyle(trackColors.green) }
-                else if (value < 0.67) { track3.setFillStyle(trackColors.blue) }
-                else                   { track3.setFillStyle(trackColors.red) }
+            valuechangeCallback: (value) => {
+                let v = this.getSliderValue(value)
+                if (lastScoreLimit != v) {
+                    lastScoreLimit = v
+                    scoreLimit_track.setFillStyle(trackColors[v])
+                    this.game.config.gameSettings.scoreLimit = this.getTimeValue(v)
+                }
             }
         }).layout()
-        Phaser.Display.Align.In.LeftCenter(slider1, slideBox1)
-        Phaser.Display.Align.In.LeftCenter(slider2, slideBox2)
-        Phaser.Display.Align.In.LeftCenter(slider3, slideBox3)
+        Phaser.Display.Align.In.LeftCenter(botDiff_slider, botDiff_box)
+        Phaser.Display.Align.In.LeftCenter(timeLimit_slider, timeLimit_box)
+        Phaser.Display.Align.In.LeftCenter(scoreLimit_slider, scoreLimit_box)
 
 
 
@@ -101,13 +115,17 @@ export class CreateLobby extends Scene {
         
     }
 
-    updateSlider (color, value) {
-        let green = 0x00ff00
-        let blue = 0x0000ff
-        let red = 0xff0000
-        if (value < 0.34 && meep != green) { meep = green }
-        else if (value < 0.67 && meep != blue) { meep = blue }
-        else if (meep != red) { meep = red}
-        console.log(meep)
+
+    getSliderValue (value) {
+        if      (value < 0.32) { return 0 }
+        else if (value < 0.67) { return 1 }
+        else                   { return 2 }
+    }
+
+
+    getTimeValue(value) {
+        if      (value == 0) { return 5  }
+        else if (value == 1) { return 10 }
+        else                 { return 15 }
     }
 }

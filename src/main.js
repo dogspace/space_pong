@@ -17,6 +17,12 @@ const config = {
         autoCenter: Phaser.Scale.CENTER_BOTH,
         //autoCenter: Phaser.Scale.NO_CENTER
     },
+    gameSettings: {
+        'botOn': false,
+        'botDiff': 0,
+        'timeLimit': 5,
+        'scoreLimit': 5
+    },
     scene: [
         Preloader,
         MainMenu,
@@ -32,4 +38,10 @@ const config = {
 };
 
 let game = new Phaser.Game(config);
+game.config.gameSettings = {
+    'botOn': false,
+    'botDiff': 0,
+    'timeLimit': 5,
+    'scoreLimit': 5
+}
 export default game
