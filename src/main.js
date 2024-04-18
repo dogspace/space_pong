@@ -40,8 +40,8 @@ const config = {
 let game = new Phaser.Game(config);
 game.config.gameSettings = {
     'botOn': false,
-    'botDiff': 0,
-    'timeLimit': 5,
-    'scoreLimit': 5
+    'botDiff': 1, // easy, medium, hard, impossible
+    'ballSpeed': 40, // 20, 40, 60, 80
+    'scoreLimit': 5 // 5, 10, 15, 20
 }
 export default game
